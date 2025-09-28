@@ -1,24 +1,66 @@
-name: The name of your action here
-description: Provide a description here
-author: Your name or organization here
+name: 'turborepo-projects-version'
+description:
+  'Builds and push docker image. Skips docker build if it is already exists.'
+author: 'Sergey Zwezdin'
 
-# Add your action's branding here. This will appear on the GitHub Marketplace.
 branding:
-  icon: heart
-  color: red
+  icon: 'upload-cloud'
+  color: 'purple'
 
 # Define your inputs here.
 inputs:
-  milliseconds:
-    description: Your input description here
+  project-path:
+    description: 'Path to the project directory'
     required: true
-    default: '1000'
+  image-name:
+    description: 'Name of the image'
+    required: true
+  dockerfile-name:
+    description: 'Name of the Dockerfile'
+    required: false
+    default: 'Dockerfile'
+  version:
+    description: 'Version tag for the Docker image'
+    required: true
+  registry-url:
+    description: 'Docker registry URL'
+    required: true
+  registry-username:
+    description: 'Docker registry username'
+    required: true
+  registry-password:
+    description: 'Docker registry password'
+    required: true
 
-# Define your outputs here.
 outputs:
-  time:
-    description: Your output description here
+  image:
+    description: 'Docker image name that was built/pushed'
+    value: ${{ steps.docker-push.outputs.image }}
+  tag:
+    description: 'Docker image tag that was built/pushed'
+    value: ${{ steps.docker-push.outputs.tag }}
+  href:
+    description: 'Full Docker image name with tag (image-name:image-tag)'
+    value: ${{ steps.docker-push.outputs.href }}
+  skipped:
+    description: 'Whether the build was skipped because image already exists'
+    value: ${{ steps.docker-push.outputs.skipped }}
 
 runs:
-  using: node24
-  main: dist/index.js
+  using: 'composite'
+  steps:
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Run Docker Push Logic
+      id: docker-push
+      shell: bash
+      env:
+        INPUT_PROJECT_PATH: ${{ inputs.project-path }}
+        INPUT_IMAGE_NAME: ${{ inputs.image-name }}
+        INPUT_DOCKERFILE_NAME: ${{ inputs.dockerfile-name }}
+        INPUT_VERSION: ${{ inputs.version }}
+        INPUT_REGISTRY_URL: ${{ inputs.registry-url }}
+        INPUT_REGISTRY_USERNAME: ${{ inputs.registry-username }}
+        INPUT_REGISTRY_PASSWORD: ${{ inputs.registry-password }}
+      run: node ${{ github.action_path }}/dist/index.js
