@@ -111,15 +111,15 @@ jobs:
 
 1. **Docker Engine Setup**: Ensures Docker is available and sets up Docker
    Buildx
-2. **Registry Authentication**: Logs into the specified Docker registry
-3. **Image Existence Check**: Uses `docker manifest inspect` to check if the
+1. **Registry Authentication**: Logs into the specified Docker registry
+1. **Image Existence Check**: Uses `docker manifest inspect` to check if the
    image already exists
-4. **Conditional Build**:
+1. **Conditional Build**:
    - If image exists: Skips build and push, returns `skipped: true`
    - If image doesn't exist: Proceeds with build and push
-5. **Build Process**: Builds the Docker image using the specified Dockerfile
-6. **Push Process**: Tags and pushes the image to the registry
-7. **Output Generation**: Provides comprehensive outputs for downstream steps
+1. **Build Process**: Builds the Docker image using the specified Dockerfile
+1. **Push Process**: Tags and pushes the image to the registry
+1. **Output Generation**: Provides comprehensive outputs for downstream steps
 
 ## Best Practices
 
@@ -170,12 +170,12 @@ images.
    - Check if the registry URL is properly formatted
    - Ensure the user has push permissions
 
-2. **Dockerfile Not Found**
+1. **Dockerfile Not Found**
    - Verify the `project-path` points to the correct directory
    - Check if the `dockerfile-name` matches the actual filename
    - Ensure the Dockerfile exists in the specified path
 
-3. **Build Failed**
+1. **Build Failed**
    - Check Dockerfile syntax and dependencies
    - Verify all required files are present in the build context
    - Review build logs for specific error messages
