@@ -1,15 +1,20 @@
 # Docker Build and Push Action
 
-A GitHub Action that builds and pushes Docker images to a registry with intelligent caching. If an image with the specified tag already exists in the registry, the build and push process will be skipped, saving time and resources.
+A GitHub Action that builds and pushes Docker images to a registry with
+intelligent caching. If an image with the specified tag already exists in the
+registry, the build and push process will be skipped, saving time and
+resources.
 
 ## Features
 
-- 🚀 **Smart Build Skipping**: Automatically skips build and push if the image already exists in the registry
+- 🚀 **Smart Build Skipping**: Automatically skips build and push if the image
+  already exists in the registry
 - 🔐 **Registry Authentication**: Supports authentication with various Docker registries
 - 📦 **Flexible Configuration**: Customizable Dockerfile names and project paths
 - ✅ **Comprehensive Outputs**: Provides detailed information about the build process
 - 🛡️ **Error Handling**: Robust error handling with clear error messages
-- 🎯 **Optimized Performance**: Uses Docker manifest inspection for efficient image existence checks
+- 🎯 **Optimized Performance**: Uses Docker manifest inspection for efficient
+  image existence checks
 
 ## Usage
 
@@ -103,10 +108,12 @@ jobs:
 
 ## How It Works
 
-1. **Docker Engine Setup**: Ensures Docker is available and sets up Docker Buildx
+1. **Docker Engine Setup**: Ensures Docker is available and sets up Docker
+   Buildx
 2. **Registry Authentication**: Logs into the specified Docker registry
-3. **Image Existence Check**: Uses `docker manifest inspect` to check if the image already exists
-4. **Conditional Build**: 
+3. **Image Existence Check**: Uses `docker manifest inspect` to check if the
+   image already exists
+4. **Conditional Build**:
    - If image exists: Skips build and push, returns `skipped: true`
    - If image doesn't exist: Proceeds with build and push
 5. **Build Process**: Builds the Docker image using the specified Dockerfile
@@ -173,4 +180,5 @@ The action automatically benefits from Docker's layer caching when building imag
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE)
+file for details.
