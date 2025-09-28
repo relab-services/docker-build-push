@@ -2,16 +2,17 @@
 
 A GitHub Action that builds and pushes Docker images to a registry with
 intelligent caching. If an image with the specified tag already exists in the
-registry, the build and push process will be skipped, saving time and
-resources.
+registry, the build and push process will be skipped, saving time and resources.
 
 ## Features
 
 - 🚀 **Smart Build Skipping**: Automatically skips build and push if the image
   already exists in the registry
-- 🔐 **Registry Authentication**: Supports authentication with various Docker registries
+- 🔐 **Registry Authentication**: Supports authentication with various Docker
+  registries
 - 📦 **Flexible Configuration**: Customizable Dockerfile names and project paths
-- ✅ **Comprehensive Outputs**: Provides detailed information about the build process
+- ✅ **Comprehensive Outputs**: Provides detailed information about the build
+  process
 - 🛡️ **Error Handling**: Robust error handling with clear error messages
 - 🎯 **Optimized Performance**: Uses Docker manifest inspection for efficient
   image existence checks
@@ -41,7 +42,7 @@ jobs:
           dockerfile-name: 'Dockerfile'
           image-name: 'my-app'
           version: 'v1.0.0'
-          registry-url: "ghcr.io/${{ github.repository_owner }}"
+          registry-url: 'ghcr.io/${{ github.repository_owner }}'
           registry-username: ${{ github.repository_owner }}
           registry-password: ${{ secrets.GITHUB_TOKEN }}
 ```
@@ -74,7 +75,7 @@ jobs:
           project-path: './app'
           image-name: 'my-app'
           version: 'v1.0.0'
-          registry-url: "ghcr.io/${{ github.repository_owner }}"
+          registry-url: 'ghcr.io/${{ github.repository_owner }}'
           registry-username: ${{ github.repository_owner }}
           registry-password: ${{ secrets.GITHUB_TOKEN }}
 
@@ -87,23 +88,23 @@ jobs:
 
 ## Inputs
 
-| Input | Description | Required | Default |
-|-------|-------------|----------|---------|
-| `project-path` | Path to the project directory containing the Dockerfile | ✅ | - |
-| `image-name` | Name of the Docker image | ✅ | - |
-| `version` | Version tag for the Docker image | ✅ | - |
-| `registry-url` | Docker registry URL (e.g., `ghcr.io`, `docker.io`, `your-registry.com`) | ✅ | - |
-| `registry-username` | Docker registry username | ✅ | - |
-| `registry-password` | Docker registry password or token | ✅ | - |
-| `dockerfile-name` | Name of the Dockerfile | ❌ | `Dockerfile` |
+| Input               | Description                                                             | Required | Default      |
+| ------------------- | ----------------------------------------------------------------------- | -------- | ------------ |
+| `project-path`      | Path to the project directory containing the Dockerfile                 | ✅       | -            |
+| `image-name`        | Name of the Docker image                                                | ✅       | -            |
+| `version`           | Version tag for the Docker image                                        | ✅       | -            |
+| `registry-url`      | Docker registry URL (e.g., `ghcr.io`, `docker.io`, `your-registry.com`) | ✅       | -            |
+| `registry-username` | Docker registry username                                                | ✅       | -            |
+| `registry-password` | Docker registry password or token                                       | ✅       | -            |
+| `dockerfile-name`   | Name of the Dockerfile                                                  | ❌       | `Dockerfile` |
 
 ## Outputs
 
-| Output | Description |
-|--------|-------------|
-| `image` | Docker image name that was built/pushed |
-| `tag` | Docker image tag that was built/pushed |
-| `href` | Full Docker image name with tag (image-name:image-tag) |
+| Output    | Description                                                                 |
+| --------- | --------------------------------------------------------------------------- |
+| `image`   | Docker image name that was built/pushed                                     |
+| `tag`     | Docker image tag that was built/pushed                                      |
+| `href`    | Full Docker image name with tag (image-name:image-tag)                      |
 | `skipped` | Whether the build was skipped because image already exists (`true`/`false`) |
 
 ## How It Works
@@ -157,7 +158,8 @@ strategy:
 
 ### 4. Cache Docker Layers
 
-The action automatically benefits from Docker's layer caching when building images.
+The action automatically benefits from Docker's layer caching when building
+images.
 
 ## Troubleshooting
 
@@ -180,5 +182,5 @@ The action automatically benefits from Docker's layer caching when building imag
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE)
-file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
+for details.
