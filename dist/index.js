@@ -1,11 +1,12 @@
 import require$$0 from 'os';
 import require$$0$1 from 'crypto';
-import require$$1 from 'fs';
-import require$$1$5 from 'path';
+import * as fs from 'fs';
+import fs__default, { existsSync } from 'fs';
+import require$$1$4, { join } from 'path';
 import require$$2 from 'http';
 import require$$3 from 'https';
 import require$$0$4 from 'net';
-import require$$1$1 from 'tls';
+import require$$1 from 'tls';
 import require$$4 from 'events';
 import require$$0$3 from 'assert';
 import require$$0$2 from 'util';
@@ -14,14 +15,14 @@ import require$$7 from 'buffer';
 import require$$8 from 'querystring';
 import require$$14 from 'stream/web';
 import require$$0$7 from 'node:stream';
-import require$$1$2 from 'node:util';
+import require$$1$1 from 'node:util';
 import require$$0$6 from 'node:events';
 import require$$0$8 from 'worker_threads';
 import require$$2$1 from 'perf_hooks';
 import require$$5 from 'util/types';
 import require$$4$1 from 'async_hooks';
-import require$$1$3 from 'console';
-import require$$1$4 from 'url';
+import require$$1$2 from 'console';
+import require$$1$3 from 'url';
 import require$$3$1 from 'zlib';
 import require$$6 from 'string_decoder';
 import require$$0$9 from 'diagnostics_channel';
@@ -222,7 +223,7 @@ function requireFileCommand () {
 	// We use any as a valid input type
 	/* eslint-disable @typescript-eslint/no-explicit-any */
 	const crypto = __importStar(require$$0$1);
-	const fs = __importStar(require$$1);
+	const fs = __importStar(fs__default);
 	const os = __importStar(require$$0);
 	const utils_1 = requireUtils$1();
 	function issueFileCommand(command, message) {
@@ -372,7 +373,7 @@ var hasRequiredTunnel$1;
 function requireTunnel$1 () {
 	if (hasRequiredTunnel$1) return tunnel$1;
 	hasRequiredTunnel$1 = 1;
-	var tls = require$$1$1;
+	var tls = require$$1;
 	var http = require$$2;
 	var https = require$$3;
 	var events = require$$4;
@@ -1754,7 +1755,7 @@ function requireSbmh () {
 	 * by Hongli Lai at: https://github.com/FooBarWidget/boyer-moore-horspool
 	 */
 	const EventEmitter = require$$0$6.EventEmitter;
-	const inherits = require$$1$2.inherits;
+	const inherits = require$$1$1.inherits;
 
 	function SBMH (needle) {
 	  if (typeof needle === 'string') {
@@ -1963,7 +1964,7 @@ function requirePartStream () {
 	if (hasRequiredPartStream) return PartStream_1;
 	hasRequiredPartStream = 1;
 
-	const inherits = require$$1$2.inherits;
+	const inherits = require$$1$1.inherits;
 	const ReadableStream = require$$0$7.Readable;
 
 	function PartStream (opts) {
@@ -2009,7 +2010,7 @@ function requireHeaderParser () {
 	hasRequiredHeaderParser = 1;
 
 	const EventEmitter = require$$0$6.EventEmitter;
-	const inherits = require$$1$2.inherits;
+	const inherits = require$$1$1.inherits;
 	const getLimit = requireGetLimit();
 
 	const StreamSearch = requireSbmh();
@@ -2117,7 +2118,7 @@ function requireDicer () {
 	hasRequiredDicer = 1;
 
 	const WritableStream = require$$0$7.Writable;
-	const inherits = require$$1$2.inherits;
+	const inherits = require$$1$1.inherits;
 
 	const StreamSearch = requireSbmh();
 
@@ -2694,7 +2695,7 @@ function requireMultipart () {
 	//     -- this will require modifications to utils.parseParams
 
 	const { Readable } = require$$0$7;
-	const { inherits } = require$$1$2;
+	const { inherits } = require$$1$1;
 
 	const Dicer = requireDicer();
 
@@ -3260,7 +3261,7 @@ function requireMain () {
 	hasRequiredMain = 1;
 
 	const WritableStream = require$$0$7.Writable;
-	const { inherits } = require$$1$2;
+	const { inherits } = require$$1$1;
 	const Dicer = requireDicer();
 
 	const MultipartParser = requireMultipart();
@@ -8084,7 +8085,7 @@ function requireConnect () {
 	    let socket;
 	    if (protocol === 'https:') {
 	      if (!tls) {
-	        tls = require$$1$1;
+	        tls = require$$1;
 	      }
 	      servername = servername || options.servername || util.getServerName(host) || null;
 
@@ -14108,7 +14109,7 @@ function requirePendingInterceptorsFormatter () {
 	hasRequiredPendingInterceptorsFormatter = 1;
 
 	const { Transform } = require$$0$5;
-	const { Console } = require$$1$3;
+	const { Console } = require$$1$2;
 
 	/**
 	 * Gets the output of `console.table(…)` as a string.
@@ -14335,7 +14336,7 @@ function requireProxyAgent () {
 	hasRequiredProxyAgent = 1;
 
 	const { kProxy, kClose, kDestroy, kInterceptors } = requireSymbols$4();
-	const { URL } = require$$1$4;
+	const { URL } = require$$1$3;
 	const Agent = requireAgent();
 	const Pool = requirePool();
 	const DispatcherBase = requireDispatcherBase();
@@ -25200,7 +25201,7 @@ function requireSummary () {
 		Object.defineProperty(exports, "__esModule", { value: true });
 		exports.summary = exports.markdownSummary = exports.SUMMARY_DOCS_URL = exports.SUMMARY_ENV_VAR = void 0;
 		const os_1 = require$$0;
-		const fs_1 = require$$1;
+		const fs_1 = fs__default;
 		const { access, appendFile, writeFile } = fs_1.promises;
 		exports.SUMMARY_ENV_VAR = 'GITHUB_STEP_SUMMARY';
 		exports.SUMMARY_DOCS_URL = 'https://docs.github.com/actions/using-workflows/workflow-commands-for-github-actions#adding-a-job-summary';
@@ -25506,7 +25507,7 @@ function requirePathUtils () {
 	};
 	Object.defineProperty(pathUtils, "__esModule", { value: true });
 	pathUtils.toPlatformPath = pathUtils.toWin32Path = pathUtils.toPosixPath = void 0;
-	const path = __importStar(require$$1$5);
+	const path = __importStar(require$$1$4);
 	/**
 	 * toPosixPath converts the given path to the posix form. On Windows, \\ will be
 	 * replaced with /.
@@ -25592,8 +25593,8 @@ function requireIoUtil () {
 		var _a;
 		Object.defineProperty(exports, "__esModule", { value: true });
 		exports.getCmdPath = exports.tryGetExecutablePath = exports.isRooted = exports.isDirectory = exports.exists = exports.READONLY = exports.UV_FS_O_EXLOCK = exports.IS_WINDOWS = exports.unlink = exports.symlink = exports.stat = exports.rmdir = exports.rm = exports.rename = exports.readlink = exports.readdir = exports.open = exports.mkdir = exports.lstat = exports.copyFile = exports.chmod = void 0;
-		const fs = __importStar(require$$1);
-		const path = __importStar(require$$1$5);
+		const fs = __importStar(fs__default);
+		const path = __importStar(require$$1$4);
 		_a = fs.promises
 		// export const {open} = 'fs'
 		, exports.chmod = _a.chmod, exports.copyFile = _a.copyFile, exports.lstat = _a.lstat, exports.mkdir = _a.mkdir, exports.open = _a.open, exports.readdir = _a.readdir, exports.readlink = _a.readlink, exports.rename = _a.rename, exports.rm = _a.rm, exports.rmdir = _a.rmdir, exports.stat = _a.stat, exports.symlink = _a.symlink, exports.unlink = _a.unlink;
@@ -25783,7 +25784,7 @@ function requireIo () {
 	Object.defineProperty(io, "__esModule", { value: true });
 	io.findInPath = io.which = io.mkdirP = io.rmRF = io.mv = io.cp = void 0;
 	const assert_1 = require$$0$3;
-	const path = __importStar(require$$1$5);
+	const path = __importStar(require$$1$4);
 	const ioUtil = __importStar(requireIoUtil());
 	/**
 	 * Copies a file or folder.
@@ -26091,7 +26092,7 @@ function requireToolrunner () {
 	const os = __importStar(require$$0);
 	const events = __importStar(require$$4);
 	const child = __importStar(require$$2$2);
-	const path = __importStar(require$$1$5);
+	const path = __importStar(require$$1$4);
 	const io = __importStar(requireIo());
 	const ioUtil = __importStar(requireIoUtil());
 	const timers_1 = require$$6$1;
@@ -26935,7 +26936,7 @@ function requireCore () {
 		const file_command_1 = requireFileCommand();
 		const utils_1 = requireUtils$1();
 		const os = __importStar(require$$0);
-		const path = __importStar(require$$1$5);
+		const path = __importStar(require$$1$4);
 		const oidc_utils_1 = requireOidcUtils();
 		/**
 		 * The code to exit an action
@@ -27246,48 +27247,221 @@ function requireCore () {
 
 var coreExports = requireCore();
 
-/**
- * Waits for a number of milliseconds.
- *
- * @param milliseconds The number of milliseconds to wait.
- * @returns Resolves with 'done!' after the wait is over.
- */
-async function wait(milliseconds) {
-    return new Promise((resolve) => {
-        if (isNaN(milliseconds))
-            throw new Error('milliseconds is not a number');
-        setTimeout(() => resolve('done!'), milliseconds);
-    });
-}
+var execExports = requireExec();
 
 /**
- * The main function for the action.
+ * Logs into a Docker registry using the provided credentials.
  *
- * @returns Resolves when the action is complete.
+ * This function executes the `docker login` command with the specified registry URL,
+ * username, and password. The password is securely passed via stdin to avoid exposing
+ * it in process arguments or logs.
+ *
+ * @param {string} registryUrl - The URL of the Docker registry to log into.
+ * @param {string} username - The username for the Docker registry.
+ * @param {string} password - The password for the Docker registry.
+ * @returns {Promise<void>} Resolves if login is successful, otherwise throws an error.
+ * @throws {Error} If the login process fails.
  */
-async function run() {
+const registryLogin = async (registryUrl, username, password) => {
     try {
-        const ms = coreExports.getInput('milliseconds');
-        // Debug logs are only output if the `ACTIONS_STEP_DEBUG` secret is true
-        coreExports.debug(`Waiting ${ms} milliseconds ...`);
-        // Log the current timestamp, wait, then log the new timestamp
-        coreExports.debug(new Date().toTimeString());
-        await wait(parseInt(ms, 10));
-        coreExports.debug(new Date().toTimeString());
-        // Set outputs for other workflow steps to use
-        coreExports.setOutput('time', new Date().toTimeString());
+        await execExports.exec('docker', ['login', registryUrl, '-u', username, '--password-stdin'], {
+            input: Buffer.from(password),
+            silent: true
+        });
+        coreExports.info(`✅ Successfully logged into registry: ${registryUrl}`);
     }
     catch (error) {
-        // Fail the workflow run if an error occurs
-        if (error instanceof Error)
-            coreExports.setFailed(error.message);
+        throw new Error(`❌ Failed to login to registry: ${error}`);
     }
-}
+};
 
 /**
- * The entrypoint for the action. This file simply imports and runs the action's
- * main logic.
+ * Checks if a Docker image exists in the specified registry.
+ *
+ * This function uses the `docker manifest inspect` command to determine if the
+ * image with the given name and version exists in the provided registry. It returns
+ * `true` if the image exists, otherwise `false`.
+ *
+ * @param {string} registryUrl - The URL of the Docker registry to check.
+ * @param {string} imageName - The name of the Docker image.
+ * @param {string} version - The tag/version of the Docker image.
+ * @returns {Promise<boolean>} Resolves to `true` if the image exists, otherwise `false`.
  */
-/* istanbul ignore next */
+const checkImageExists = async (registryUrl, imageName, version) => {
+    try {
+        const fullImageName = `${registryUrl}/${imageName}:${version}`;
+        const exitCode = await execExports.exec('docker', ['manifest', 'inspect', fullImageName], {
+            ignoreReturnCode: true,
+            silent: true
+        });
+        const exists = exitCode === 0;
+        coreExports.info(`📦 Image ${fullImageName} ${exists ? 'exists' : 'does not exist'}`);
+        return exists;
+    }
+    catch (error) {
+        coreExports.info(`❌ Error checking image existence: ${error}`);
+        return false;
+    }
+};
+
+/**
+ * Builds a Docker image from the specified project path and Dockerfile.
+ *
+ * This function constructs the full path to the Dockerfile, verifies its existence,
+ * and then executes the `docker build` command to build the image with the given
+ * image name and version tag.
+ *
+ * @param {string} projectPath - The path to the project directory containing the Dockerfile.
+ * @param {string} dockerfileName - The name of the Dockerfile to use for the build.
+ * @param {string} imageName - The name to assign to the built Docker image.
+ * @param {string} version - The version tag to assign to the built Docker image.
+ * @returns {Promise<void>} Resolves when the build is successful, otherwise throws an error.
+ * @throws {Error} If the Dockerfile does not exist or the build process fails.
+ */
+const build = async (projectPath, dockerfileName, imageName, version) => {
+    try {
+        const dockerfilePath = join(projectPath, dockerfileName);
+        if (!existsSync(dockerfilePath)) {
+            throw new Error(`❌ Dockerfile not found at: ${dockerfilePath}`);
+        }
+        const fullImageName = `${imageName}:${version}`;
+        await execExports.exec('docker', [
+            'build',
+            '-t',
+            fullImageName,
+            '-f',
+            dockerfilePath,
+            projectPath
+        ]);
+        coreExports.info(`✅ Successfully built: ${fullImageName}`);
+    }
+    catch (error) {
+        throw new Error(`❌ Failed to build: ${error}`);
+    }
+};
+
+/**
+ * Pushes a Docker image to a specified registry.
+ *
+ * This function tags a local Docker image with the remote registry name and version,
+ * then pushes it to the specified Docker registry. If the push is successful, a success
+ * message is logged. If any step fails, an error is thrown.
+ *
+ * @param {string} registryUrl - The URL of the Docker registry to push the image to.
+ * @param {string} imageName - The name of the Docker image to push.
+ * @param {string} version - The version tag of the Docker image.
+ * @returns {Promise<void>} Resolves when the image is successfully pushed, otherwise throws an error.
+ * @throws {Error} If tagging or pushing the image fails.
+ */
+const push = async (registryUrl, imageName, version) => {
+    const localImageName = `${imageName}:${version}`;
+    const remoteImageName = `${registryUrl}/${imageName}:${version}`;
+    try {
+        await execExports.exec('docker', ['tag', localImageName, remoteImageName]);
+        await execExports.exec('docker', ['push', remoteImageName]);
+        coreExports.info(`✅ Successfully pushed: ${remoteImageName}`);
+    }
+    catch (error) {
+        throw new Error(`❌ Failed to push ${remoteImageName}: ${error}`);
+    }
+};
+
+/**
+ * Ensures that the Docker engine is installed and available on the system.
+ *
+ * This function attempts to execute `docker --version` to verify that Docker is
+ * installed and running. If Docker is not available, it throws an error.
+ *
+ * @throws {Error} If Docker is not installed or not running.
+ */
+const ensureDockerEngine = async () => {
+    try {
+        await execExports.exec('docker', ['--version'], { silent: true });
+        coreExports.info('✅ Docker engine is available and ready');
+    }
+    catch (error) {
+        throw new Error(`❌ Docker is not available. Please ensure Docker is installed and running. Error: ${error}`);
+    }
+};
+
+const run = async () => {
+    try {
+        const input = {
+            projectPath: coreExports.getInput('project-path') || process.env.INPUT_PROJECT_PATH || '',
+            imageName: coreExports.getInput('image-name') || process.env.INPUT_IMAGE_NAME || '',
+            dockerfileName: coreExports.getInput('dockerfile-name') ||
+                process.env.INPUT_DOCKERFILE_NAME ||
+                'Dockerfile',
+            version: coreExports.getInput('version') || process.env.INPUT_VERSION || '',
+            registryUrl: coreExports.getInput('registry-url') || process.env.INPUT_REGISTRY_URL || '',
+            registryUsername: coreExports.getInput('registry-username') ||
+                process.env.INPUT_REGISTRY_USERNAME ||
+                '',
+            registryPassword: coreExports.getInput('registry-password') ||
+                process.env.INPUT_REGISTRY_PASSWORD ||
+                ''
+        };
+        if (!input.projectPath)
+            throw new Error('project-path is required');
+        if (!input.imageName)
+            throw new Error('image-name is required');
+        if (!input.version)
+            throw new Error('version is required');
+        if (!input.registryUrl)
+            throw new Error('registry-url is required');
+        if (!input.registryUsername)
+            throw new Error('registry-username is required');
+        if (!input.registryPassword)
+            throw new Error('registry-password is required');
+        const result = await docker(input);
+        coreExports.setOutput('image', result.image);
+        coreExports.setOutput('tag', result.tag);
+        coreExports.setOutput('href', result.href);
+        coreExports.setOutput('skipped', result.skipped.toString());
+        if (process.env.GITHUB_OUTPUT) {
+            fs.appendFileSync(process.env.GITHUB_OUTPUT, `image=${result.image}\n`);
+            fs.appendFileSync(process.env.GITHUB_OUTPUT, `tag=${result.tag}\n`);
+            fs.appendFileSync(process.env.GITHUB_OUTPUT, `href=${result.href}\n`);
+            fs.appendFileSync(process.env.GITHUB_OUTPUT, `skipped=${result.skipped.toString()}\n`);
+        }
+    }
+    catch (error) {
+        coreExports.setFailed(`❌ Action failed: ${error instanceof Error ? error.message : String(error)}`);
+    }
+};
+/**
+ * Main function to handle Docker build and push
+ */
+const docker = async (inputs) => {
+    try {
+        const meta = {
+            image: inputs.imageName,
+            tag: inputs.version,
+            href: `${inputs.registryUrl}/${inputs.imageName}:${inputs.version}`
+        };
+        await ensureDockerEngine();
+        await registryLogin(inputs.registryUrl, inputs.registryUsername, inputs.registryPassword);
+        const imageExists = await checkImageExists(inputs.registryUrl, inputs.imageName, inputs.version);
+        if (imageExists) {
+            coreExports.info(`⏭️  Image already exists, skipping build and push`);
+            return {
+                ...meta,
+                skipped: true
+            };
+        }
+        await build(inputs.projectPath, inputs.dockerfileName, inputs.imageName, inputs.version);
+        await push(inputs.registryUrl, inputs.imageName, inputs.version);
+        coreExports.info('✅ Docker push process completed successfully');
+        return {
+            ...meta,
+            skipped: false
+        };
+    }
+    catch (error) {
+        throw new Error(`❌ Docker push failed: ${error instanceof Error ? error.message : String(error)}`);
+    }
+};
 run();
+
+export { docker };
 //# sourceMappingURL=index.js.map
