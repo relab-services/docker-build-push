@@ -41,7 +41,7 @@ export const build = async (
       '-f',
       dockerfilePath,
       projectPath,
-      args
+      ...args.trim().split(/\s+/)
     ])
 
     core.info(`✅ Successfully built: ${fullImageName}`)
