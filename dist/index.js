@@ -27315,10 +27315,11 @@ const checkImageExists = async (registryUrl, imageName, version) => {
  * @param {string} dockerfileName - The name of the Dockerfile to use for the build.
  * @param {string} imageName - The name to assign to the built Docker image.
  * @param {string} version - The version tag to assign to the built Docker image.
+ * @param {string} args - Additional arguments to pass to the docker build command.
  * @returns {Promise<void>} Resolves when the build is successful, otherwise throws an error.
  * @throws {Error} If the Dockerfile does not exist or the build process fails.
  */
-const build = async (projectPath, dockerfileName, imageName, version) => {
+const build = async (projectPath, dockerfileName, imageName, version, args = '') => {
     try {
         const dockerfilePath = join(projectPath, dockerfileName);
         if (!existsSync(dockerfilePath)) {
@@ -27331,6 +27332,7 @@ const build = async (projectPath, dockerfileName, imageName, version) => {
             fullImageName,
             '-f',
             dockerfilePath,
+            args,
             projectPath
         ]);
         coreExports.info(`✅ Successfully built: ${fullImageName}`);
@@ -27399,7 +27401,8 @@ const run = async () => {
                 '',
             registryPassword: coreExports.getInput('registry-password') ||
                 process.env.INPUT_REGISTRY_PASSWORD ||
-                ''
+                '',
+            args: coreExports.getInput('args') || process.env.INPUT_ARGS || ''
         };
         if (!input.projectPath)
             throw new Error('project-path is required');
@@ -27449,7 +27452,7 @@ const docker = async (inputs) => {
                 skipped: true
             };
         }
-        await build(inputs.projectPath, inputs.dockerfileName, inputs.imageName, inputs.version);
+        await build(inputs.projectPath, inputs.dockerfileName, inputs.imageName, inputs.version, inputs.args);
         await push(inputs.registryUrl, inputs.imageName, inputs.version);
         coreExports.info('✅ Docker push process completed successfully');
         return {

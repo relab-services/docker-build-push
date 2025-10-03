@@ -14,6 +14,7 @@ import * as exec from '@actions/exec'
  * @param {string} dockerfileName - The name of the Dockerfile to use for the build.
  * @param {string} imageName - The name to assign to the built Docker image.
  * @param {string} version - The version tag to assign to the built Docker image.
+ * @param {string} args - Additional arguments to pass to the docker build command.
  * @returns {Promise<void>} Resolves when the build is successful, otherwise throws an error.
  * @throws {Error} If the Dockerfile does not exist or the build process fails.
  */
@@ -21,7 +22,8 @@ export const build = async (
   projectPath: string,
   dockerfileName: string,
   imageName: string,
-  version: string
+  version: string,
+  args: string = ''
 ): Promise<void> => {
   try {
     const dockerfilePath = join(projectPath, dockerfileName)
@@ -38,6 +40,7 @@ export const build = async (
       fullImageName,
       '-f',
       dockerfilePath,
+      args,
       projectPath
     ])
 

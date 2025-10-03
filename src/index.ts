@@ -27,7 +27,8 @@ const run = async (): Promise<void> => {
       registryPassword:
         core.getInput('registry-password') ||
         process.env.INPUT_REGISTRY_PASSWORD ||
-        ''
+        '',
+      args: core.getInput('args') || process.env.INPUT_ARGS || ''
     }
 
     if (!input.projectPath) throw new Error('project-path is required')
@@ -70,6 +71,7 @@ export type Input = {
   registryUrl: string
   registryUsername: string
   registryPassword: string
+  args: string
 }
 
 export type Output = {
@@ -117,7 +119,8 @@ export const docker = async (inputs: Input): Promise<Output> => {
       inputs.projectPath,
       inputs.dockerfileName,
       inputs.imageName,
-      inputs.version
+      inputs.version,
+      inputs.args
     )
 
     await push(inputs.registryUrl, inputs.imageName, inputs.version)
