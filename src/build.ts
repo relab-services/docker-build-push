@@ -1,5 +1,5 @@
 import { existsSync } from 'fs'
-import { join } from 'path'
+import { resolve } from 'path'
 import * as core from '@actions/core'
 import * as exec from '@actions/exec'
 
@@ -26,7 +26,7 @@ export const build = async (
   args: string = ''
 ): Promise<void> => {
   try {
-    const dockerfilePath = join(projectPath, dockerfileName)
+    const dockerfilePath = resolve(dockerfileName)
 
     if (!existsSync(dockerfilePath)) {
       throw new Error(`❌ Dockerfile not found at: ${dockerfilePath}`)
