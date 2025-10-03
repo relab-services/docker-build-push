@@ -27333,7 +27333,7 @@ const build = async (projectPath, dockerfileName, imageName, version, args = '')
             '-f',
             dockerfilePath,
             projectPath,
-            args
+            ...args.trim().split(/\s+/)
         ]);
         coreExports.info(`✅ Successfully built: ${fullImageName}`);
     }
