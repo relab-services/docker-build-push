@@ -27316,16 +27316,26 @@ const checkImageExists = async (registryUrl, imageName, version) => {
  * @param {string} imageName - The name to assign to the built Docker image.
  * @param {string} version - The version tag to assign to the built Docker image.
  * @param {string} args - Additional arguments to pass to the docker build command.
+ * @param {boolean} pullLatest - Whether to pull the latest image before building (default: true).
  * @returns {Promise<void>} Resolves when the build is successful, otherwise throws an error.
  * @throws {Error} If the Dockerfile does not exist or the build process fails.
  */
-const build = async (projectPath, dockerfileName, imageName, version, args = '') => {
+const build = async (projectPath, dockerfileName, imageName, version, args = '', pullLatest = true) => {
     try {
         const dockerfilePath = resolve(dockerfileName);
         if (!existsSync(dockerfilePath)) {
             throw new Error(`❌ Dockerfile not found at: ${dockerfilePath}`);
         }
         const fullImageName = `${imageName}:${version}`;
+        // Only pull latest if pullLatest is true
+        if (pullLatest) {
+            try {
+                await execExports.exec('docker', ['pull', `${imageName}:latest`]);
+            }
+            catch (error) {
+                coreExports.warning(`⚠️ Failed to pull ${imageName}:latest: ${error}`);
+            }
+        }
         await execExports.exec('docker', [
             'build',
             '-t',
@@ -27334,7 +27344,9 @@ const build = async (projectPath, dockerfileName, imageName, version, args = '')
             dockerfilePath,
             projectPath,
             ...args.trim().split(/\s+/)
-        ]);
+        ], {
+        // cwd
+        });
         coreExports.info(`✅ Successfully built: ${fullImageName}`);
     }
     catch (error) {
@@ -27402,7 +27414,10 @@ const run = async () => {
             registryPassword: coreExports.getInput('registry-password') ||
                 process.env.INPUT_REGISTRY_PASSWORD ||
                 '',
-            args: coreExports.getInput('args') || process.env.INPUT_ARGS || ''
+            args: coreExports.getInput('args') || process.env.INPUT_ARGS || '',
+            pullLatest: (coreExports.getInput('pull-latest') ||
+                process.env.INPUT_PULL_LATEST ||
+                'true').toLowerCase() === 'true'
         };
         if (!input.projectPath)
             throw new Error('project-path is required');
@@ -27452,7 +27467,7 @@ const docker = async (inputs) => {
                 skipped: true
             };
         }
-        await build(inputs.projectPath, inputs.dockerfileName, inputs.imageName, inputs.version, inputs.args);
+        await build(inputs.projectPath, inputs.dockerfileName, inputs.imageName, inputs.version, inputs.args, inputs.pullLatest);
         await push(inputs.registryUrl, inputs.imageName, inputs.version);
         coreExports.info('✅ Docker push process completed successfully');
         return {
