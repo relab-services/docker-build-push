@@ -27315,12 +27315,13 @@ const checkImageExists = async (registryUrl, imageName, version) => {
  * @param {string} dockerfileName - The name of the Dockerfile to use for the build.
  * @param {string} imageName - The name to assign to the built Docker image.
  * @param {string} version - The version tag to assign to the built Docker image.
+ * @param {string} registryUrl - The Docker registry URL to pull the latest image from.
  * @param {string} args - Additional arguments to pass to the docker build command.
  * @param {boolean} pullLatest - Whether to pull the latest image before building (default: true).
  * @returns {Promise<void>} Resolves when the build is successful, otherwise throws an error.
  * @throws {Error} If the Dockerfile does not exist or the build process fails.
  */
-const build = async (projectPath, dockerfileName, imageName, version, args = '', pullLatest = true) => {
+const build = async (projectPath, dockerfileName, imageName, version, registryUrl, args = '', pullLatest = true) => {
     try {
         const dockerfilePath = resolve(dockerfileName);
         if (!existsSync(dockerfilePath)) {
@@ -27330,10 +27331,13 @@ const build = async (projectPath, dockerfileName, imageName, version, args = '',
         // Only pull latest if pullLatest is true
         if (pullLatest) {
             try {
-                await execExports.exec('docker', ['pull', `${imageName}:latest`]);
+                await execExports.exec('docker', [
+                    'pull',
+                    `${registryUrl}/${imageName}:latest`
+                ]);
             }
             catch (error) {
-                coreExports.warning(`⚠️ Failed to pull ${imageName}:latest: ${error}`);
+                coreExports.warning(`⚠️ Failed to pull ${registryUrl}/${imageName}:latest: ${error}`);
             }
         }
         await execExports.exec('docker', [
@@ -27467,7 +27471,7 @@ const docker = async (inputs) => {
                 skipped: true
             };
         }
-        await build(inputs.projectPath, inputs.dockerfileName, inputs.imageName, inputs.version, inputs.args, inputs.pullLatest);
+        await build(inputs.projectPath, inputs.dockerfileName, inputs.imageName, inputs.version, inputs.registryUrl, inputs.args, inputs.pullLatest);
         await push(inputs.registryUrl, inputs.imageName, inputs.version);
         coreExports.info('✅ Docker push process completed successfully');
         return {

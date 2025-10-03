@@ -14,6 +14,7 @@ import * as exec from '@actions/exec'
  * @param {string} dockerfileName - The name of the Dockerfile to use for the build.
  * @param {string} imageName - The name to assign to the built Docker image.
  * @param {string} version - The version tag to assign to the built Docker image.
+ * @param {string} registryUrl - The Docker registry URL to pull the latest image from.
  * @param {string} args - Additional arguments to pass to the docker build command.
  * @param {boolean} pullLatest - Whether to pull the latest image before building (default: true).
  * @returns {Promise<void>} Resolves when the build is successful, otherwise throws an error.
@@ -24,6 +25,7 @@ export const build = async (
   dockerfileName: string,
   imageName: string,
   version: string,
+  registryUrl: string,
   args: string = '',
   pullLatest: boolean = true
 ): Promise<void> => {
@@ -39,9 +41,14 @@ export const build = async (
     // Only pull latest if pullLatest is true
     if (pullLatest) {
       try {
-        await exec.exec('docker', ['pull', `${imageName}:latest`])
+        await exec.exec('docker', [
+          'pull',
+          `${registryUrl}/${imageName}:latest`
+        ])
       } catch (error) {
-        core.warning(`⚠️ Failed to pull ${imageName}:latest: ${error}`)
+        core.warning(
+          `⚠️ Failed to pull ${registryUrl}/${imageName}:latest: ${error}`
+        )
       }
     }
 

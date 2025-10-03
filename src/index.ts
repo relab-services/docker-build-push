@@ -127,6 +127,7 @@ export const docker = async (inputs: Input): Promise<Output> => {
       inputs.dockerfileName,
       inputs.imageName,
       inputs.version,
+      inputs.registryUrl,
       inputs.args,
       inputs.pullLatest
     )
