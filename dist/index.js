@@ -2,7 +2,7 @@ import require$$0 from 'os';
 import require$$0$1 from 'crypto';
 import * as fs from 'fs';
 import fs__default, { existsSync } from 'fs';
-import require$$1$4, { join } from 'path';
+import require$$1$4, { resolve } from 'path';
 import require$$2 from 'http';
 import require$$3 from 'https';
 import require$$0$4 from 'net';
@@ -27321,7 +27321,7 @@ const checkImageExists = async (registryUrl, imageName, version) => {
  */
 const build = async (projectPath, dockerfileName, imageName, version, args = '') => {
     try {
-        const dockerfilePath = join(projectPath, dockerfileName);
+        const dockerfilePath = resolve(dockerfileName);
         if (!existsSync(dockerfilePath)) {
             throw new Error(`❌ Dockerfile not found at: ${dockerfilePath}`);
         }
