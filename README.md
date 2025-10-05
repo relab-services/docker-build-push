@@ -13,6 +13,8 @@ registry, the build and push process will be skipped, saving time and resources.
 - 📦 **Flexible Configuration**: Customizable Dockerfile names and project paths
 - ⚙️ **Custom Build Arguments**: Pass additional arguments to the docker build
   command
+- 🌍 **Environment Variables**: Pass environment variables to the docker build
+  process
 - ✅ **Comprehensive Outputs**: Provides detailed information about the build
   process
 - 🛡️ **Error Handling**: Robust error handling with clear error messages
@@ -151,6 +153,42 @@ jobs:
             --no-cache
 ```
 
+### Using Environment Variables
+
+```yaml
+name: Build with Environment Variables
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build Docker Image with Environment Variables
+        uses: relab-services/docker-build-push@v1
+        with:
+          project-path: './app'
+          image-name: 'my-app'
+          version: 'v1.0.0'
+          registry-url: 'ghcr.io/${{ github.repository_owner }}'
+          registry-username: ${{ github.repository_owner }}
+          registry-password: ${{ secrets.GITHUB_TOKEN }}
+          args: |
+            --build-arg PROJECT=${{ matrix.project.name }}
+            --build-arg COMMIT_SHA=${{ github.sha }}
+            --build-arg TURBO_TEAM=${{ vars.TURBO_TEAM }}
+            --secret id=turbo_token,env=TURBO_TOKEN
+            --secret id=turbo_remote_cache_signature_key,env=TURBO_REMOTE_CACHE_SIGNATURE_KEY
+          env: |
+            TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+            TURBO_REMOTE_CACHE_SIGNATURE_KEY: ${{ secrets.TURBO_REMOTE_CACHE_SIGNATURE_KEY }}
+```
+
 ### Controlling Latest Image Pull
 
 ```yaml
@@ -191,6 +229,7 @@ jobs:
 | `registry-password` | Docker registry password or token                                       | ✅       | -            |
 | `dockerfile-name`   | Name of the Dockerfile                                                  | ❌       | `Dockerfile` |
 | `args`              | Additional arguments to pass to the docker build command                | ❌       | `''`         |
+| `env`               | Environment variables to pass to the docker build command (YAML format) | ❌       | `''`         |
 | `pull-latest`       | Whether to pull the latest image before building                        | ❌       | `true`       |
 
 ## Outputs
@@ -266,12 +305,35 @@ args: '--build-arg NODE_ENV=development --build-arg API_URL=https://api.dev.com'
 args: '--target production --build-arg BUILD_DATE=${{ github.event.head_commit.timestamp }}'
 ```
 
-### 5. Cache Docker Layers
+### 5. Use Environment Variables for Secrets and Tokens
+
+```yaml
+# Pass environment variables to the build process
+env: |
+  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+  TURBO_REMOTE_CACHE_SIGNATURE_KEY: ${{ secrets.TURBO_REMOTE_CACHE_SIGNATURE_KEY }}
+  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+# Use them in build arguments
+args: |
+  --secret id=turbo_token,env=TURBO_TOKEN
+  --secret id=turbo_remote_cache_signature_key,env=TURBO_REMOTE_CACHE_SIGNATURE_KEY
+  --build-arg NPM_TOKEN=$NPM_TOKEN
+```
+
+**Environment variables are useful for:**
+
+- Passing secrets to Docker build secrets
+- Providing tokens for private registries
+- Setting build-time configuration values
+- Enabling secure access to external services during build
+
+### 6. Cache Docker Layers
 
 The action automatically benefits from Docker's layer caching when building
 images.
 
-### 6. Control Latest Image Pull
+### 7. Control Latest Image Pull
 
 ```yaml
 # Pull latest image (default behavior) - useful for base image updates
@@ -306,6 +368,14 @@ pull-latest: false
    - Check Dockerfile syntax and dependencies
    - Verify all required files are present in the build context
    - Review build logs for specific error messages
+
+1. **Environment Variables Not Available**
+   - Verify the `env` parameter is properly formatted as YAML
+   - Check that environment variable names don't contain spaces or special
+     characters
+   - Ensure secrets are properly configured in your repository settings
+   - Review build logs to confirm environment variables are being passed
+     correctly
 
 ## License
 

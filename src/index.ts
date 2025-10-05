@@ -34,7 +34,8 @@ const run = async (): Promise<void> => {
           core.getInput('pull-latest') ||
           process.env.INPUT_PULL_LATEST ||
           'true'
-        ).toLowerCase() === 'true'
+        ).toLowerCase() === 'true',
+      env: core.getInput('env') || process.env.INPUT_ENV || ''
     }
 
     if (!input.projectPath) throw new Error('project-path is required')
@@ -79,6 +80,7 @@ export type Input = {
   registryPassword: string
   args: string
   pullLatest: boolean
+  env: string
 }
 
 export type Output = {
@@ -129,7 +131,8 @@ export const docker = async (inputs: Input): Promise<Output> => {
       inputs.version,
       inputs.registryUrl,
       inputs.args,
-      inputs.pullLatest
+      inputs.pullLatest,
+      inputs.env
     )
 
     await push(inputs.registryUrl, inputs.imageName, inputs.version)

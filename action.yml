@@ -40,6 +40,10 @@ inputs:
       'Whether to pull the latest image before building (default: true)'
     required: false
     default: 'true'
+  env:
+    description: 'Environment variables to pass to the docker build command'
+    required: false
+    default: ''
 
 outputs:
   image:
@@ -74,4 +78,5 @@ runs:
         INPUT_REGISTRY_PASSWORD: ${{ inputs.registry-password }}
         INPUT_ARGS: ${{ inputs.args }}
         INPUT_PULL_LATEST: ${{ inputs.pull-latest }}
+        INPUT_ENV: ${{ inputs.env }}
       run: node ${{ github.action_path }}/dist/index.js
