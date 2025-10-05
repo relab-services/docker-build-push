@@ -2,7 +2,6 @@ import { existsSync } from 'fs'
 import { resolve } from 'path'
 import * as core from '@actions/core'
 import * as exec from '@actions/exec'
-import * as yaml from 'js-yaml'
 
 /**
  * Builds a Docker image from the specified project path and Dockerfile.
@@ -18,7 +17,6 @@ import * as yaml from 'js-yaml'
  * @param {string} registryUrl - The Docker registry URL to pull the latest image from.
  * @param {string} args - Additional arguments to pass to the docker build command.
  * @param {boolean} pullLatest - Whether to pull the latest image before building (default: true).
- * @param {string} env - Environment variables to pass to the docker build command (YAML format).
  * @returns {Promise<void>} Resolves when the build is successful, otherwise throws an error.
  * @throws {Error} If the Dockerfile does not exist or the build process fails.
  */
@@ -29,8 +27,7 @@ export const build = async (
   version: string,
   registryUrl: string,
   args: string = '',
-  pullLatest: boolean = true,
-  env: string = ''
+  pullLatest: boolean = true
 ): Promise<void> => {
   try {
     const dockerfilePath = resolve(dockerfileName)
@@ -40,16 +37,6 @@ export const build = async (
     }
 
     const fullImageName = `${imageName}:${version}`
-
-    // Parse environment variables from YAML
-    let envVars: Record<string, string> = {}
-    if (env.trim()) {
-      try {
-        envVars = (yaml.load(env) as Record<string, string>) || {}
-      } catch (error) {
-        core.warning(`⚠️ Failed to parse environment variables: ${error}`)
-      }
-    }
 
     // Only pull latest if pullLatest is true
     if (pullLatest) {
@@ -82,8 +69,7 @@ export const build = async (
             Object.entries(process.env).filter(
               ([, value]) => value !== undefined
             )
-          ) as Record<string, string>),
-          ...envVars
+          ) as Record<string, string>)
         }
       }
     )

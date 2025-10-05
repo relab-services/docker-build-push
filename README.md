@@ -155,6 +155,9 @@ jobs:
 
 ### Using Environment Variables
 
+Environment variables are automatically available to the docker build process
+when you use the action's `env` section:
+
 ```yaml
 name: Build with Environment Variables
 
@@ -184,9 +187,10 @@ jobs:
             --build-arg TURBO_TEAM=${{ vars.TURBO_TEAM }}
             --secret id=turbo_token,env=TURBO_TOKEN
             --secret id=turbo_remote_cache_signature_key,env=TURBO_REMOTE_CACHE_SIGNATURE_KEY
-          env: |
-            TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
-            TURBO_REMOTE_CACHE_SIGNATURE_KEY: ${{ secrets.TURBO_REMOTE_CACHE_SIGNATURE_KEY }}
+        env:
+          TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+          TURBO_REMOTE_CACHE_SIGNATURE_KEY:
+            ${{ secrets.TURBO_REMOTE_CACHE_SIGNATURE_KEY }}
 ```
 
 ### Controlling Latest Image Pull
@@ -229,7 +233,6 @@ jobs:
 | `registry-password` | Docker registry password or token                                       | ✅       | -            |
 | `dockerfile-name`   | Name of the Dockerfile                                                  | ❌       | `Dockerfile` |
 | `args`              | Additional arguments to pass to the docker build command                | ❌       | `''`         |
-| `env`               | Environment variables to pass to the docker build command (YAML format) | ❌       | `''`         |
 | `pull-latest`       | Whether to pull the latest image before building                        | ❌       | `true`       |
 
 ## Outputs
@@ -308,10 +311,11 @@ args: '--target production --build-arg BUILD_DATE=${{ github.event.head_commit.t
 ### 5. Use Environment Variables for Secrets and Tokens
 
 ```yaml
-# Pass environment variables to the build process
-env: |
+# Pass environment variables via the action's env section
+env:
   TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
-  TURBO_REMOTE_CACHE_SIGNATURE_KEY: ${{ secrets.TURBO_REMOTE_CACHE_SIGNATURE_KEY }}
+  TURBO_REMOTE_CACHE_SIGNATURE_KEY:
+    ${{ secrets.TURBO_REMOTE_CACHE_SIGNATURE_KEY }}
   NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
 # Use them in build arguments
@@ -370,10 +374,10 @@ pull-latest: false
    - Review build logs for specific error messages
 
 1. **Environment Variables Not Available**
-   - Verify the `env` parameter is properly formatted as YAML
    - Check that environment variable names don't contain spaces or special
      characters
    - Ensure secrets are properly configured in your repository settings
+   - Verify the action's `env` section is properly formatted
    - Review build logs to confirm environment variables are being passed
      correctly
 
