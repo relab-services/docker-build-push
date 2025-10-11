@@ -55,6 +55,7 @@ export const build = async (
     await exec.exec(
       'docker',
       [
+        'buildx',
         'build',
         '-t',
         fullImageName,

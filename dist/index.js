@@ -27341,6 +27341,7 @@ const build = async (projectPath, dockerfileName, imageName, version, registryUr
             }
         }
         await execExports.exec('docker', [
+            'buildx',
             'build',
             '-t',
             fullImageName,
