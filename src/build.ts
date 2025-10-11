@@ -59,6 +59,8 @@ export const build = async (
         'build',
         '-t',
         fullImageName,
+        '-t',
+        `${registryUrl}/${fullImageName}`,
         '-f',
         dockerfilePath,
         projectPath,

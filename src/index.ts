@@ -3,7 +3,6 @@ import * as fs from 'fs'
 import { registryLogin } from './registry-login.js'
 import { checkImageExists } from './check-image-exists.js'
 import { build } from './build.js'
-import { push } from './push.js'
 import { ensureDockerEngine } from './ensure-docker-engine.js'
 
 const run = async (): Promise<void> => {
@@ -131,8 +130,6 @@ export const docker = async (inputs: Input): Promise<Output> => {
       inputs.args,
       inputs.pullLatest
     )
-
-    // await push(inputs.registryUrl, inputs.imageName, inputs.version)
 
     core.info('✅ Docker push process completed successfully')
 

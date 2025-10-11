@@ -27345,6 +27345,8 @@ const build = async (projectPath, dockerfileName, imageName, version, registryUr
             'build',
             '-t',
             fullImageName,
+            '-t',
+            `${registryUrl}/${fullImageName}`,
             '-f',
             dockerfilePath,
             projectPath,
@@ -27450,7 +27452,6 @@ const docker = async (inputs) => {
             };
         }
         await build(inputs.projectPath, inputs.dockerfileName, inputs.imageName, inputs.version, inputs.registryUrl, inputs.args, inputs.pullLatest);
-        // await push(inputs.registryUrl, inputs.imageName, inputs.version)
         coreExports.info('✅ Docker push process completed successfully');
         return {
             ...meta,
