@@ -62,7 +62,8 @@ export const build = async (
         '-f',
         dockerfilePath,
         projectPath,
-        ...args.trim().split(/\s+/)
+        ...args.trim().split(/\s+/),
+        '--push'
       ],
       {
         env: {

@@ -27348,7 +27348,8 @@ const build = async (projectPath, dockerfileName, imageName, version, registryUr
             '-f',
             dockerfilePath,
             projectPath,
-            ...args.trim().split(/\s+/)
+            ...args.trim().split(/\s+/),
+            '--push'
         ], {
             env: {
                 ...Object.fromEntries(Object.entries(process.env).filter(([, value]) => value !== undefined))
@@ -27358,39 +27359,6 @@ const build = async (projectPath, dockerfileName, imageName, version, registryUr
     }
     catch (error) {
         throw new Error(`❌ Failed to build: ${error}`);
-    }
-};
-
-/**
- * Pushes a Docker image to a specified registry.
- *
- * This function tags a local Docker image with the remote registry name and version,
- * then pushes it to the specified Docker registry. It also tags and pushes the image
- * as "latest". If the push is successful, a success message is logged.
- * If any step fails, an error is thrown.
- *
- * @param {string} registryUrl - The URL of the Docker registry to push the image to.
- * @param {string} imageName - The name of the Docker image to push.
- * @param {string} version - The version tag of the Docker image.
- * @returns {Promise<void>} Resolves when the image is successfully pushed, otherwise throws an error.
- * @throws {Error} If tagging or pushing the image fails.
- */
-const push = async (registryUrl, imageName, version) => {
-    const localImageName = `${imageName}:${version}`;
-    const remoteImageName = `${registryUrl}/${imageName}:${version}`;
-    const latestImageName = `${registryUrl}/${imageName}:latest`;
-    try {
-        // Tag and push the versioned image
-        await execExports.exec('docker', ['tag', localImageName, remoteImageName]);
-        await execExports.exec('docker', ['push', remoteImageName]);
-        coreExports.info(`✅ Successfully pushed: ${remoteImageName}`);
-        // Also tag and push as "latest"
-        await execExports.exec('docker', ['tag', localImageName, latestImageName]);
-        await execExports.exec('docker', ['push', latestImageName]);
-        coreExports.info(`✅ Successfully pushed as latest: ${latestImageName}`);
-    }
-    catch (error) {
-        throw new Error(`❌ Failed to push ${remoteImageName}: ${error}`);
     }
 };
 
@@ -27482,7 +27450,7 @@ const docker = async (inputs) => {
             };
         }
         await build(inputs.projectPath, inputs.dockerfileName, inputs.imageName, inputs.version, inputs.registryUrl, inputs.args, inputs.pullLatest);
-        await push(inputs.registryUrl, inputs.imageName, inputs.version);
+        // await push(inputs.registryUrl, inputs.imageName, inputs.version)
         coreExports.info('✅ Docker push process completed successfully');
         return {
             ...meta,

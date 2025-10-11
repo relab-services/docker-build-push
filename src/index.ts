@@ -132,7 +132,7 @@ export const docker = async (inputs: Input): Promise<Output> => {
       inputs.pullLatest
     )
 
-    await push(inputs.registryUrl, inputs.imageName, inputs.version)
+    // await push(inputs.registryUrl, inputs.imageName, inputs.version)
 
     core.info('✅ Docker push process completed successfully')
 
