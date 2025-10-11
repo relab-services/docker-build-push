@@ -16,7 +16,6 @@ import * as exec from '@actions/exec'
  * @param {string} version - The version tag to assign to the built Docker image.
  * @param {string} registryUrl - The Docker registry URL to pull the latest image from.
  * @param {string} args - Additional arguments to pass to the docker build command.
- * @param {boolean} pullLatest - Whether to pull the latest image before building (default: true).
  * @returns {Promise<void>} Resolves when the build is successful, otherwise throws an error.
  * @throws {Error} If the Dockerfile does not exist or the build process fails.
  */
@@ -26,8 +25,7 @@ export const build = async (
   imageName: string,
   version: string,
   registryUrl: string,
-  args: string = '',
-  pullLatest: boolean = true
+  args: string = ''
 ): Promise<void> => {
   try {
     const dockerfilePath = resolve(dockerfileName)
@@ -38,20 +36,6 @@ export const build = async (
 
     const fullImageName = `${imageName}:${version}`
 
-    // Only pull latest if pullLatest is true
-    if (pullLatest) {
-      try {
-        await exec.exec('docker', [
-          'pull',
-          `${registryUrl}/${imageName}:latest`
-        ])
-      } catch (error) {
-        core.warning(
-          `⚠️ Failed to pull ${registryUrl}/${imageName}:latest: ${error}`
-        )
-      }
-    }
-
     await exec.exec(
       'docker',
       [
@@ -59,6 +43,8 @@ export const build = async (
         'build',
         '-t',
         `${registryUrl}/${fullImageName}`,
+        '-t',
+        `${registryUrl}/${imageName}:latest`,
         '-f',
         dockerfilePath,
         projectPath,

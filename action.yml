@@ -35,11 +35,6 @@ inputs:
     description: 'Additional arguments to pass to docker build command'
     required: false
     default: ''
-  pull-latest:
-    description:
-      'Whether to pull the latest image before building (default: true)'
-    required: false
-    default: 'true'
 
 outputs:
   image:
@@ -73,5 +68,4 @@ runs:
         INPUT_REGISTRY_USERNAME: ${{ inputs.registry-username }}
         INPUT_REGISTRY_PASSWORD: ${{ inputs.registry-password }}
         INPUT_ARGS: ${{ inputs.args }}
-        INPUT_PULL_LATEST: ${{ inputs.pull-latest }}
       run: node ${{ github.action_path }}/dist/index.js

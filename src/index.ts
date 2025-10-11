@@ -27,13 +27,7 @@ const run = async (): Promise<void> => {
         core.getInput('registry-password') ||
         process.env.INPUT_REGISTRY_PASSWORD ||
         '',
-      args: core.getInput('args') || process.env.INPUT_ARGS || '',
-      pullLatest:
-        (
-          core.getInput('pull-latest') ||
-          process.env.INPUT_PULL_LATEST ||
-          'true'
-        ).toLowerCase() === 'true'
+      args: core.getInput('args') || process.env.INPUT_ARGS || ''
     }
 
     if (!input.projectPath) throw new Error('project-path is required')
@@ -77,7 +71,6 @@ export type Input = {
   registryUsername: string
   registryPassword: string
   args: string
-  pullLatest: boolean
 }
 
 export type Output = {
@@ -127,8 +120,7 @@ export const docker = async (inputs: Input): Promise<Output> => {
       inputs.imageName,
       inputs.version,
       inputs.registryUrl,
-      inputs.args,
-      inputs.pullLatest
+      inputs.args
     )
 
     core.info('✅ Docker push process completed successfully')

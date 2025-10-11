@@ -193,34 +193,6 @@ jobs:
             ${{ secrets.TURBO_REMOTE_CACHE_SIGNATURE_KEY }}
 ```
 
-### Controlling Latest Image Pull
-
-```yaml
-name: Build without Pulling Latest
-
-on:
-  push:
-    branches: [main]
-
-jobs:
-  build-and-push:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Build Docker Image (Skip Latest Pull)
-        uses: relab-services/docker-build-push@v1
-        with:
-          project-path: './app'
-          image-name: 'my-app'
-          version: 'v1.0.0'
-          registry-url: 'ghcr.io/${{ github.repository_owner }}'
-          registry-username: ${{ github.repository_owner }}
-          registry-password: ${{ secrets.GITHUB_TOKEN }}
-          pull-latest: false # Skip pulling the latest image
-```
-
 ## Inputs
 
 | Input               | Description                                                             | Required | Default      |
@@ -233,7 +205,6 @@ jobs:
 | `registry-password` | Docker registry password or token                                       | ✅       | -            |
 | `dockerfile-name`   | Name of the Dockerfile                                                  | ❌       | `Dockerfile` |
 | `args`              | Additional arguments to pass to the docker build command                | ❌       | `''`         |
-| `pull-latest`       | Whether to pull the latest image before building                        | ❌       | `true`       |
 
 ## Outputs
 
@@ -254,8 +225,6 @@ jobs:
 1. **Conditional Build**:
    - If image exists: Skips build and push, returns `skipped: true`
    - If image doesn't exist: Proceeds with build and push
-1. **Latest Image Pull** (optional): Pulls the latest version of the image if
-   `pull-latest` is set to `true` (default behavior)
 1. **Build Process**: Builds the Docker image using the specified Dockerfile
 1. **Push Process**: Tags and pushes the image to the registry
 1. **Output Generation**: Provides comprehensive outputs for downstream steps
@@ -336,23 +305,6 @@ args: |
 
 The action automatically benefits from Docker's layer caching when building
 images.
-
-### 7. Control Latest Image Pull
-
-```yaml
-# Pull latest image (default behavior) - useful for base image updates
-pull-latest: true
-
-# Skip pulling latest - useful for faster builds or when you want to use local cache
-pull-latest: false
-```
-
-**When to use `pull-latest: false`:**
-
-- You want faster builds by using local Docker cache
-- You're building in an environment with limited bandwidth
-- You want to ensure reproducible builds using only local images
-- You're building from a private registry where pulling latest might fail
 
 ## Troubleshooting
 
