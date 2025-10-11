@@ -27344,8 +27344,6 @@ const build = async (projectPath, dockerfileName, imageName, version, registryUr
             'buildx',
             'build',
             '-t',
-            fullImageName,
-            '-t',
             `${registryUrl}/${fullImageName}`,
             '-f',
             dockerfilePath,
