@@ -3,6 +3,7 @@ import * as fs from 'fs'
 import { registryLogin } from './registry-login.js'
 import { checkImageExists } from './check-image-exists.js'
 import { build } from './build.js'
+import { push } from './push.js'
 import { ensureDockerEngine } from './ensure-docker-engine.js'
 
 const run = async (): Promise<void> => {
@@ -27,7 +28,13 @@ const run = async (): Promise<void> => {
         core.getInput('registry-password') ||
         process.env.INPUT_REGISTRY_PASSWORD ||
         '',
-      args: core.getInput('args') || process.env.INPUT_ARGS || ''
+      args: core.getInput('args') || process.env.INPUT_ARGS || '',
+      pullLatest:
+        (
+          core.getInput('pull-latest') ||
+          process.env.INPUT_PULL_LATEST ||
+          'true'
+        ).toLowerCase() === 'true'
     }
 
     if (!input.projectPath) throw new Error('project-path is required')
@@ -71,6 +78,7 @@ export type Input = {
   registryUsername: string
   registryPassword: string
   args: string
+  pullLatest: boolean
 }
 
 export type Output = {
@@ -120,8 +128,11 @@ export const docker = async (inputs: Input): Promise<Output> => {
       inputs.imageName,
       inputs.version,
       inputs.registryUrl,
-      inputs.args
+      inputs.args,
+      inputs.pullLatest
     )
+
+    await push(inputs.registryUrl, inputs.imageName, inputs.version)
 
     core.info('✅ Docker push process completed successfully')
 
